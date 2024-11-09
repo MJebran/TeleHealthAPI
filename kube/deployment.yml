@@ -21,6 +21,7 @@ spec:
       containers:
         - name: demo-app
           image: ${DOCKERHUB_USERNAME}/telehealth-api:${IMAGE_TAG}
+          imagePullPolicy: Always
           env:
             - name: POSTGRES_HOST
               value: "telehealth-api-db-service"

@@ -21,8 +21,8 @@ jobs:
 
     - name: Build and push
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/telehealth_api:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/telehealth_api:${{ github.run_number }} .
-        docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/telehealth_api
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-api:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-api:${{ github.run_number }} .
+        docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-api
   
 
     - name: Deploy to Kubernetes
@@ -32,7 +32,7 @@ jobs:
         export IMAGE_TAG=${{ github.run_number }}
         export PG_USER=${{ secrets.POSTGRES_USER }}
         export PG_DB=${{ secrets.POSTGRES_PASSWORD }}
-        export PG_PASSWORD=${{ secrets.PG_PASSWORD }}
+        export PG_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
 
         for file in kube/*; do
             cat "$file" | envsubst | kubectl apply -f -;
