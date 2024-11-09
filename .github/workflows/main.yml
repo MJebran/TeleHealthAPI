@@ -30,8 +30,8 @@ jobs:
         export PATH=$PATH:~/.nix-profile/bin:/nix/var/nix/profiles/default/bin
         export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
         export IMAGE_TAG=${{ github.run_number }}
-        export PG_USER=${{ secrets.PG_USER }}
-        export PG_DB=${{ secrets.PG_DB }}
+        export PG_USER=${{ secrets.POSTGRES_USER }}
+        export PG_DB=${{ secrets.POSTGRES_PASSWORD }}
         export PG_PASSWORD=${{ secrets.PG_PASSWORD }}
 
         for file in kube/*; do
