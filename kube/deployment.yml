@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-api
+  name: demo-app
   namespace: telehealth-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo-api
+      app: demo-app
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -16,48 +16,34 @@ spec:
   template:
     metadata:
       labels:
-        app: demo-api
-    # spec:
-      # initContainers:
-      #   - name: init-seed-images
-      #     image: ${DOCKERHUB_USERNAME}/telehealth-images:50
-      #     command:
-      #       [
-      #         "sh",
-      #         "-c",
-      #         'if [ -z "$(ls -A /app/images)" ]; then cp -r /seededImages/* /app/images/; fi',
-      #       ]
-      #     volumeMounts:
-      #       - name: image-storage
-      #         mountPath: /app/images
-      # containers:
-      #   - name: demo-api
-      #     image: ${DOCKERHUB_USERNAME}/telehealth-api:${IMAGE_TAG}
-      #     ports:
-      #       - containerPort: 8080
-      #     volumeMounts:
-      #       - mountPath: /app/images
-      #         name: image-storage
-
-      # volumes: 
-      #   - name: image-storage
-      #     persistentVolumeClaim:
-      #       claimName: demo-api-pvc
-        
-
-
-
-        
-        # readinessProbe:
-        #   httpGet:
-        #     path: /api/health
-        #     port: 8080
-        #   initialDelaySeconds: 5
-        #   periodSeconds: 10
-        #   timeoutSeconds: 3
-        # livenessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: 8080
-        #   initialDelaySeconds: 15
-        #   periodSeconds: 20
+        app: demo-app
+    spec:
+      containers:
+        - name: demo-app
+          image: ${DOCKERHUB_USERNAME}/telehealth-api:${IMAGE_TAG}
+          env:
+            - name: POSTGRES_HOST
+              value: "telehealth-api-db-service"
+            - name: POSTGRES_USER 
+              value: "${PG_USER}"
+            - name: POSTGRES_PASSWORD
+              value: "${PG_PASSWORD}"
+            - name: POSTGRES_DB
+              value: "${PG_DB}"
+            - name: POSTGRES_PORT
+              value: "5432"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
