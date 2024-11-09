@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: demo-api-ingress
-  namespace: mustafa
+  namespace: telehealth-api
 spec:
   rules:
   - host: api.mustafa-react.duckdns.org
