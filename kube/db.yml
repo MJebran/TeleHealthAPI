@@ -11,59 +11,59 @@ spec:
       storage: 1Gi
 
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  namespace: telehealth-api
-  name: telehealth-api-db-deployment
-  labels:
-    app: telehealth-api-db
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: telehealth-api-db  # Corrected to match the template labels
-  template:
-    metadata:
-      labels:
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    namespace: telehealth-api
+    name: telehealth-api-db-deployment
+    labels:
+      app: telehealth-api-db
+  spec:
+    replicas: 1
+    strategy:
+      type: Recreate
+    selector:
+      matchLabels:
         app: telehealth-api-db
-    spec:
-      containers:
-      - name: telehealth-api-db
-        image: postgres
-        ports:
-        - containerPort: 5432
-        env:
-        - name: POSTGRES_USER 
-          value: "${PG_USER}"
-        - name: POSTGRES_PASSWORD
-          value: "${PG_PASSWORD}"
-        - name: POSTGRES_DB
-          value: "${PG_DB}"
-        volumeMounts:
+    template:
+      metadata:
+        labels:
+          app: telehealth-api-db
+      spec:
+        containers:
+        - name: telehealth-api-db
+          image: postgres
+          ports:
+          - containerPort: 5432
+          env:
+          - name: POSTGRES_USER 
+            value: ${PG_USER}
+          - name: POSTGRES_PASSWORD
+            value: "${PG_PASSWORD}"
+          - name: POSTGRES_DB
+            value: "${PG_DB}"
+          volumeMounts:
+          - name: postgresstorage
+            mountPath: /var/lib/postgresql/data
+          - name: init-script
+            mountPath: /docker-entrypoint-initdb.d
+          readinessProbe:
+            exec:
+              command:
+              - pg_isready
+              - "-U"
+              - postgres
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+        volumes:
         - name: postgresstorage
-          mountPath: /var/lib/postgresql/data
+          persistentVolumeClaim: 
+            claimName: telehealth-api-db-pvc
         - name: init-script
-          mountPath: /docker-entrypoint-initdb.d
-        readinessProbe:
-          exec:
-            command:
-            - pg_isready
-            - "-U"
-            - postgres
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 5
-      volumes:
-      - name: postgresstorage
-        persistentVolumeClaim: 
-          claimName: telehealth-api-db-pvc
-      - name: init-script
-        configMap:
-          name: telehealth-api-postgres-init
+          configMap:
+            name: telehealth-api-postgres-init
 
 ---
 apiVersion: v1
