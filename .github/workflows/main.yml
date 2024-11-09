@@ -1,9 +1,10 @@
-# CI
-name: Deployment to alex server 4
+name: Deployment api to alex server 4
 on:
   push:
     branches:
     - main
+  # workflow_dispatch:
+
 jobs:
   build-and-push:
     runs-on: self-hosted
@@ -14,23 +15,26 @@ jobs:
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3
-      with: 
+      with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and push
+    - name: Build and push API
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-client:${{ github.run_number}} .
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-client:${{ github.run_number}}
-# CD
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/inventory-api:${{ github.run_number }} -t ${{ secrets.DOCKERHUB_USERNAME }}/inventory-api:latest .
+        docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/inventory-api
+
+    # - name: Build and push SeededImages 
+    #   run: |
+    #     docker build -f Dockerfile.images -t ${{ secrets.DOCKERHUB_USERNAME }}/inventory-images:${{ github.run_number }} -t ${{ secrets.DOCKERHUB_USERNAME }}/inventory-api:latest .
+    #     docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/inventory-images
+
     - name: Deploy to Kubernetes
       run: |
         export PATH=$PATH:~/.nix-profile/bin:/nix/var/nix/profiles/default/bin
         export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
         export IMAGE_TAG=${{ github.run_number }}
-        kubectl -n mustafa delete configmap telehealth-web-postgres-init || true 
-        ls
-        kubectl -n mustafa create configmap telehealth-web-postgres-init --from-file=schema.sql
-        for file in kube/*; do 
-            cat "$file" | envsubst | kubectl apply -f -; 
+
+        for file in kube/*; do
+            cat "$file" | envsubst | kubectl apply -f -;
         done
