@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: demo-app
-          image: ${DOCKERHUB_USERNAME}/telehealth-api:${IMAGE_TAG}
+          image: ${DOCKERHUB_USERNAME}/telehealth-api:${IMAGE_TAG}:latest
           imagePullPolicy: Always
           env:
             - name: POSTGRES_HOST
