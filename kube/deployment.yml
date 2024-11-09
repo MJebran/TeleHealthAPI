@@ -20,7 +20,7 @@ spec:
     spec:
       initContainers:
         - name: init-seed-images
-          image: ${DOCKERHUB_USERNAME}/inventory-images:50
+          image: ${DOCKERHUB_USERNAME}/telehealth-images:50
           command:
             [
               "sh",
@@ -32,7 +32,7 @@ spec:
               mountPath: /app/images
       containers:
         - name: demo-api
-          image: ${DOCKERHUB_USERNAME}/inventory-api:${IMAGE_TAG}
+          image: ${DOCKERHUB_USERNAME}/telehealth-api:${IMAGE_TAG}
           ports:
             - containerPort: 8080
           volumeMounts:

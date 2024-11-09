@@ -21,13 +21,13 @@ jobs:
 
     - name: Build and push API
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/inventory-api:${{ github.run_number }} -t ${{ secrets.DOCKERHUB_USERNAME }}/inventory-api:latest .
-        docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/inventory-api
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-api:${{ github.run_number }} -t ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-api:latest .
+        docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-api
 
     # - name: Build and push SeededImages 
     #   run: |
-    #     docker build -f Dockerfile.images -t ${{ secrets.DOCKERHUB_USERNAME }}/inventory-images:${{ github.run_number }} -t ${{ secrets.DOCKERHUB_USERNAME }}/inventory-api:latest .
-    #     docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/inventory-images
+    #     docker build -f Dockerfile.images -t ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-images:${{ github.run_number }} -t ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-api:latest .
+    #     docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/telehealth-images
 
     - name: Deploy to Kubernetes
       run: |
