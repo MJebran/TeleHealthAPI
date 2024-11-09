@@ -5,7 +5,7 @@ metadata:
   namespace: telehealth-api
 spec:
   rules:
-  - host: api.mustafa-react.duckdns.org
+  - host: api.telehealth.duckdns.org
     http:
       paths:
       - path: /

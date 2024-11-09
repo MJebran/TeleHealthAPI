@@ -17,32 +17,36 @@ spec:
     metadata:
       labels:
         app: demo-api
-    spec:
-      initContainers:
-        - name: init-seed-images
-          image: ${DOCKERHUB_USERNAME}/telehealth-images:50
-          command:
-            [
-              "sh",
-              "-c",
-              'if [ -z "$(ls -A /app/images)" ]; then cp -r /seededImages/* /app/images/; fi',
-            ]
-          volumeMounts:
-            - name: image-storage
-              mountPath: /app/images
-      containers:
-        - name: demo-api
-          image: ${DOCKERHUB_USERNAME}/telehealth-api:${IMAGE_TAG}
-          ports:
-            - containerPort: 8080
-          volumeMounts:
-            - mountPath: /app/images
-              name: image-storage
+    # spec:
+      # initContainers:
+      #   - name: init-seed-images
+      #     image: ${DOCKERHUB_USERNAME}/telehealth-images:50
+      #     command:
+      #       [
+      #         "sh",
+      #         "-c",
+      #         'if [ -z "$(ls -A /app/images)" ]; then cp -r /seededImages/* /app/images/; fi',
+      #       ]
+      #     volumeMounts:
+      #       - name: image-storage
+      #         mountPath: /app/images
+      # containers:
+      #   - name: demo-api
+      #     image: ${DOCKERHUB_USERNAME}/telehealth-api:${IMAGE_TAG}
+      #     ports:
+      #       - containerPort: 8080
+      #     volumeMounts:
+      #       - mountPath: /app/images
+      #         name: image-storage
 
-      volumes: 
-        - name: image-storage
-          persistentVolumeClaim:
-            claimName: demo-api-pvc
+      # volumes: 
+      #   - name: image-storage
+      #     persistentVolumeClaim:
+      #       claimName: demo-api-pvc
+        
+
+
+
         
         # readinessProbe:
         #   httpGet:
