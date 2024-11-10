@@ -2,7 +2,7 @@
 # kind: PersistentVolumeClaim
 # metadata:
 #   namespace: telehealth-api
-#   name: telehealth-api-pvc
+#   name: demo-api-pvc
 # spec:
 #   accessModes:
 #     - ReadWriteMany

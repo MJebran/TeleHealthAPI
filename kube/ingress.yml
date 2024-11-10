@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: telehealth-api-ingress
+  name: demo-api-ingress
   namespace: telehealth-api
 spec:
   rules:
-  - host: api.telehealth.duckdns.org  # idk if need to change this to something else not sure
+  - host: api.telehealth.duckdns.org
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: telehealth-api-service
+            name: demo-api-service
             port:
               number: 8080
