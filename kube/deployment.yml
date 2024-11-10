@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-app
+  name: telehealth-api-deployment
   namespace: telehealth-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo-app
+      app: telehealth-api-deployment
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -16,10 +16,10 @@ spec:
   template:
     metadata:
       labels:
-        app: demo-app
+        app: telehealth-api-deployment
     spec:
       containers:
-        - name: demo-app
+        - name: telehealth-api-deployment
           image: ${DOCKERHUB_USERNAME}/telehealth-api:${IMAGE_TAG}
           imagePullPolicy: Always
           env:
