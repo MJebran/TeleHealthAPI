@@ -24,15 +24,23 @@ spec:
           imagePullPolicy: Always
           env:
             - name: POSTGRES_DB
-              value: ${POSTGRES_DB}
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
             - name: POSTGRES_USER
-              value: ${POSTGRES_USER}
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
-              value: ${POSTGRES_PASSWORD}
-            # - name: POSTGRES_HOST
-            #   value: telehealth-api-db-service
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_PORT
               value: "5432"
+
           ports:
             - containerPort: 8080
           readinessProbe:
