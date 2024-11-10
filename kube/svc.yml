@@ -5,7 +5,7 @@ metadata:
   namespace: telehealth-api
 spec:
   selector:
-    app: telehealth-api
+    app: telehealth-api-deployment
   ports:
   - protocol: TCP
     port: 8080

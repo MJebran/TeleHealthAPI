@@ -26,11 +26,20 @@ spec:
             - name: POSTGRES_HOST
               value: "telehealth-api-db-service"
             - name: POSTGRES_USER 
-              value: "${PG_USER}"
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: PG_USER
             - name: POSTGRES_PASSWORD
-              value: "${PG_PASSWORD}"
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: PG_PASSWORD
             - name: POSTGRES_DB
-              value: "${PG_DB}"
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: PG_DB
             - name: POSTGRES_PORT
               value: "5432"
           ports:
