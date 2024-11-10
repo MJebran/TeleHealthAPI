@@ -9,6 +9,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
+  storageClassName: nfs-client
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -35,43 +36,34 @@ spec:
         ports:
         - containerPort: 5432
         env:
-        - name: POSTGRES_USER 
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: PG_USER
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: PG_PASSWORD
         - name: POSTGRES_DB
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: PG_DB
+          value: "${POSTGRES_DB}"
+        - name: POSTGRES_USER
+          value: "${POSTGRES_USER}"
+        - name: POSTGRES_PASSWORD
+          value: "${POSTGRES_PASSWORD}"
         volumeMounts:
         - name: postgresstorage
           mountPath: /var/lib/postgresql/data
-        - name: init-script
+        - name: schema-volume
           mountPath: /docker-entrypoint-initdb.d
-        readinessProbe:
-          exec:
-            command:
-            - pg_isready
-            - "-U"
-            - postgres
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 5
+        # readinessProbe:
+        #   exec:
+        #     command:
+        #     - pg_isready
+        #     - "-U"
+        #     - postgres
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 10
+        #   timeoutSeconds: 5
+        #   failureThreshold: 5
       volumes:
       - name: postgresstorage
         persistentVolumeClaim: 
           claimName: telehealth-api-db-pvc
-      - name: init-script
+      - name: schema-volume
         configMap:
-          name: telehealth-api-postgres-init
+          name: postgres-schema
 ---
 apiVersion: v1
 kind: Service
